@@ -17,10 +17,13 @@
         .board{
             width: 570px;
             height: 570px;
+            border-left: 1px solid black;
+            border-top: 1px solid black;
         }
         .node{
             float: left;
-            border: 1px solid black;
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
             width: 190px;
             height: 190px;
             box-sizing: border-box;
@@ -47,7 +50,7 @@
         <h2 ng-show="tie">It's a tie</h2>
         <div class="board">
             <div class="node"
-                 ng-repeat="node in nodes track by $index" ng-click="pick($index)"
+                 ng-repeat="node in board track by $index" ng-click="pick($index)"
                  ng-class="{'cross': node == true, 'circle': node == false}">
             </div>
         </div>
@@ -65,31 +68,32 @@
 
         $scope.reset = function(){
             $scope.moves = 0;
-            for(var i in $scope.nodes){
-                $scope.nodes[i] = null;
+            for(var i in $scope.board){
+                $scope.board[i] = null;
             }
             $scope.endGame = false;
             $scope.tie = false;
         };
 
         $scope.pick = function($index){
-            if($scope.nodes[$index] == null && !$scope.endGame) {
-                $scope.nodes[$index] = $scope.currentPlayer;
+            if($scope.board[$index] === null && !$scope.endGame) {
+                $scope.board[$index] = $scope.currentPlayer;
                 if(++$scope.moves > 2){
                     if($scope.horiVerti() || $scope.downLeft() || $scope.downRight()){
                         $scope.endGame = true;
                     }
                 }
-                if(!$scope.endGame)
+                if(!$scope.endGame){
                     $scope.currentPlayer = !$scope.currentPlayer;
+                }
             }
-            if($scope.moves == 9 && !$scope.endGame){
+            if($scope.moves === 9 && !$scope.endGame){
                 $scope.tie = true;
                 $scope.endGame = true;
             }
         };
 
-        $scope.nodes = [
+        $scope.board = [
             null, null, null,
             null, null, null,
             null, null, null
@@ -100,10 +104,10 @@
 
             //Vertial Check
             for(var i = 0; i < 3 && !isComplete; i++){
-                var compare = $scope.nodes[i];
+                var compare = $scope.board[i];
                 isComplete = true;
                 for(var j = i; j < 9; j += 3){
-                    if($scope.nodes[j] == null || compare != $scope.nodes[j]) {
+                    if($scope.board[j] === null || compare !== $scope.board[j]) {
                         isComplete = false; break;
                     }
                 }
@@ -111,34 +115,25 @@
 
             //Horizontal Check
             for(var i = 0; i < 9 && !isComplete; i += 3){
-                var compare = $scope.nodes[i];
+                var compare = $scope.board[i];
                 isComplete = true;
                 for(var j = i; j < i + 3; j++){
-                    if($scope.nodes[j] == null || compare != $scope.nodes[j]) {
+                    if($scope.board[j] === null || compare !== $scope.board[j]) {
                         isComplete = false; break;
                     }
                 }
             }
-
             return isComplete;
         };
+
         $scope.downRight = function(){
-            var compare = $scope.nodes[0];
-            for(var j = 4; j < 9; j += 4){
-                if($scope.nodes[j] == null || compare != $scope.nodes[j]) {
-                    return false;
-                }
-            }
-            return true;
+            var compare = $scope.board[0];
+            return compare !== null && compare === $scope.board[4] && compare === $scope.board[8];
         };
+
         $scope.downLeft = function(){
-            var compare = $scope.nodes[2];
-            for (var j = 4; j < 7; j += 2) {
-                if ($scope.nodes[j] == null || compare != $scope.nodes[j]) {
-                    return false;
-                }
-            }
-            return true;
+            var compare = $scope.board[2];
+            return compare !== null && compare ===  $scope.board[4] && compare ===  $scope.board[6];
         };
     });
 </script>
