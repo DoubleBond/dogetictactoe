@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tic Tac Toe</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <style>
+        .container{
+            width: 570px;
+            margin: 0 auto;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+        .board{
+            width: 570px;
+            height: 570px;
+        }
+        .node{
+            float: left;
+            border: 1px solid black;
+            width: 190px;
+            height: 190px;
+            box-sizing: border-box;
+        }
+        .cross{
+            background-image: url('x.jpg');
+            background-size: cover;
+        }
+        .circle{
+            background-image: url('o.jpg');
+            background-size: cover;
+        }
+    </style>
+</head>
+<body ng-app="TicTacToeApp">
+
+<div  id="element" ng-controller="TicTacToeController">
+    <div class="container" style="margin-top: 60px">
+        <div>
+            <h2 ng-show="!endGame">It is {{ (currentPlayer)? 'Cate': 'Doge' }}'s turn.</h2>
+            <h2 ng-show="endGame && !tie">{{ (currentPlayer)? 'Cate': 'Doge' }} has WON!!!</h2>
+            <button class="btn" ng-show="endGame" ng-click="reset()">Reset?</button>
+        </div>
+        <h2 ng-show="tie">It's a tie</h2>
+        <div class="board">
+            <div class="node"
+                 ng-repeat="node in nodes track by $index" ng-click="pick($index)"
+                 ng-class="{'cross': node == true, 'circle': node == false}">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var app = angular.module('TicTacToeApp', []);
+
+    app.controller('TicTacToeController', function($scope){
+        $scope.currentPlayer = true;
+        $scope.moves = 0;
+        $scope.endGame = false;
+        $scope.tie = false;
+
+        $scope.reset = function(){
+            $scope.moves = 0;
+            for(var i in $scope.nodes){
+                $scope.nodes[i] = null;
+            }
+            $scope.endGame = false;
+            $scope.tie = false;
+        };
+
+        $scope.pick = function($index){
+            if($scope.nodes[$index] == null && !$scope.endGame) {
+                $scope.nodes[$index] = $scope.currentPlayer;
+                if(++$scope.moves > 2){
+                    if($scope.horiVerti() || $scope.downLeft() || $scope.downRight()){
+                        $scope.endGame = true;
+                    }
+                }
+                if(!$scope.endGame)
+                    $scope.currentPlayer = !$scope.currentPlayer;
+            }
+            if($scope.moves == 9){
+                $scope.tie = true;
+                $scope.endGame = true;
+            }
+        };
+
+        $scope.nodes = [
+            null, null, null,
+            null, null, null,
+            null, null, null
+        ];
+
+        $scope.horiVerti = function(){
+            var isComplete = false;
+
+            //Vertial Check
+            for(var i = 0; i < 3 && !isComplete; i++){
+                var compare = $scope.nodes[i];
+                isComplete = true;
+                for(var j = i; j < 9; j += 3){
+                    if($scope.nodes[j] == null || compare != $scope.nodes[j]) {
+                        isComplete = false; break;
+                    }
+                }
+            }
+
+            //Horizontal Check
+            for(var i = 0; i < 9 && !isComplete; i += 3){
+                var compare = $scope.nodes[i];
+                isComplete = true;
+                for(var j = i; j < i + 3; j++){
+                    if($scope.nodes[j] == null || compare != $scope.nodes[j]) {
+                        isComplete = false; break;
+                    }
+                }
+            }
+
+            return isComplete;
+        };
+        $scope.downRight = function(){
+            var compare = $scope.nodes[0];
+            for(var j = 4; j < 9; j += 4){
+                if($scope.nodes[j] == null || compare != $scope.nodes[j]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        $scope.downLeft = function(){
+            var compare = $scope.nodes[2];
+            for (var j = 4; j < 7; j += 2) {
+                if ($scope.nodes[j] == null || compare != $scope.nodes[j]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+    });
+</script>
+</body>
+</html>
