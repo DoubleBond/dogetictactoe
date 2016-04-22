@@ -10,12 +10,18 @@ class TicTacToe{
         this.player_turn = 0;
     }
 
+    public getCurrentPlayer(){
+        return this.players[this.player_turn];
+    }
+
     public newGame(){
         this.player_turn = ++this.player_turn % 2;
         this.board = new Board();
     }
 
     public getGameStatus(){
+        if(this.board.num_moves < 3)
+            return -2;
         if(this.board.checkWinner())
             return this.player_turn;
         if(this.board.num_moves == 9)
@@ -23,11 +29,12 @@ class TicTacToe{
         return -2;
     }
 
-    public makeMove(position: number){
-        if(!this.board.setMove(position, this.player_turn))
-            return;
-
+    public nextPlayer(){
         this.player_turn = ++this.player_turn % 2;
+    }
+
+    public makeMove(position: number){
+        return this.board.setMove(position, this.player_turn)
     }
 }
 
@@ -36,6 +43,7 @@ class Board{
     public num_moves: number;
 
     public constructor(){
+        this.num_moves = 0;
         this.board_array = [
             -1, -1, -1,
             -1, -1, -1,
@@ -81,21 +89,23 @@ class Board{
 
 abstract class Player{
     name: string;
+    constructor(name: string){
+        this.name = name;
+    }
     isHuman(){
-        return this typeof "HumanPlayer";
+        return typeof this == "HumanPlayer";
     }
 }
 
 class HumanPlayer extends Player{
-    name: string;
     constructor(name: string) {
-        this.name = name;
+        super(name);
     }
 }
 class ComputerPlayer extends Player{
-    name: string;
+
     constructor(name: string) {
-        this.name = name;
+        super(name);
     }
 
     public getMove(board: Board){

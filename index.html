@@ -29,11 +29,11 @@
             box-sizing: border-box;
         }
         .cross{
-            background: url("img/x.jpg");
+            background: url("assets/cate.jpg");
             background-size: cover;
         }
         .circle{
-            background: url("img/o.jpg");
+            background: url("assets/doge.jpg");
             background-size: cover;
         }
     </style>
@@ -50,37 +50,43 @@
         </div>
         <div class="board">
             <div class="node"
-                 ng-repeat="node in board_array track by $index" ng-click="setMove($index)"
-                 ng-class="{'cross': node == 0, 'circle': node == 1}"
-            >
+                 ng-repeat="node in board.board_array track by $index" ng-click="setMove($index)"
+                 ng-class="{'cross': node == 0, 'circle': node == 1}">
             </div>
         </div>
     </div>
 </div>
 
-<script src="src/main.js"></script>
-<script>
-    var app = angular.module('TicTacToeApp', []);
+<script src="assets/TicTacToe.js"></script>
 
-    var TicTacToeGame = new TicTacToeGame(new HumanPlayer("Cate"), new HumanPlayer("Doge"));
+<script>
+    var TicTacToe = new TicTacToe(new HumanPlayer("Cate"), new HumanPlayer("Doge"));
+
+   var app = angular.module('TicTacToeApp', []);
 
     app.controller('TicTacToeController', function($scope){
-        $scope.board_array = TicTacToeGame.board.getBoard();
-        $scope.game_state = TicTacToeGame.isOver();
-        $scope.current_player = TicTacToeGame.getCurrentPlayer();
+        $scope.board = TicTacToe.board;
+        $scope.game_state = TicTacToe.getGameStatus();
+        $scope.current_player = TicTacToe.getCurrentPlayer();
 
         $scope.newGame = function(){
-            $scope.board_array = TicTacToeGame.newGame();
-            $scope.game_state = TicTacToeGame.isOver();
+            TicTacToe.newGame();
+            $scope.board = TicTacToe.board;
+            $scope.game_state = TicTacToe.getGameStatus();
+            $scope.current_player = TicTacToe.getCurrentPlayer();
         };
 
         $scope.setMove = function(position){
-            if($scope.game_state == -2) {
-                $scope.game_state = TicTacToeGame.setTurn(position);
-                $scope.current_player = TicTacToeGame.getCurrentPlayer();
+            if($scope.game_state != 2 && TicTacToe.makeMove(position)){
+                $scope.game_state = TicTacToe.getGameStatus();
+                console.log($scope.board.num_moves);
+                if($scope.game_state == -2)
+                    TicTacToe.nextPlayer();
+                $scope.current_player = TicTacToe.getCurrentPlayer();
             }
         };
     });
+
 </script>
 </body>
 </html>
