@@ -1,92 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tic Tac Toe</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-    <style>
-        .container{
-            width: 570px;
-            margin: 0 auto;
-            padding-right: 15px;
-            padding-left: 15px;
-        }
-        .board{
-            width: 570px;
-            height: 570px;
-            border-left: 1px solid black;
-            border-top: 1px solid black;
-        }
-        .node{
-            float: left;
-            border-bottom: 1px solid black;
-            border-right: 1px solid black;
-            width: 190px;
-            height: 190px;
-            box-sizing: border-box;
-        }
-        .cross{
-            background: url("assets/cate.jpg");
-            background-size: cover;
-        }
-        .circle{
-            background: url("assets/doge.jpg");
-            background-size: cover;
-        }
-    </style>
-</head>
-<body ng-app="TicTacToeApp" class="doge">
-
-<div  id="element" ng-controller="TicTacToeController">
-    <div class="container" style="margin-top: 60px">
+  </head>
+  <body ng-app="TicTacToeApp" class="doge">
+    <div id="element" ng-controller="TicTacToeController">
+      <div class="container" style="margin-top: 60px">
         <div>
-            <h2 ng-show="game_state == -2">It's {{ current_player.name }} turn.</h2>
-            <h2 ng-show="game_state > -1">{{ current_player.name }} has WON!!!</h2>
-            <h2 ng-show="game_state == -1">It's a tie</h2>
-            <button class="btn" ng-show="game_state > -2" ng-click="newGame()">New Game?</button>
+          <h2 ng-show="game_state == -2">
+            It's {{ current_player.name }} turn.
+          </h2>
+          <h2 ng-show="game_state > -1">
+            {{ current_player.name }} has WON!!!
+          </h2>
+          <h2 ng-show="game_state == -1">It's a tie</h2>
+          <button class="btn" ng-show="game_state > -2" ng-click="newGame()">
+            New Game?
+          </button>
         </div>
         <div class="board">
-            <div class="node"
-                 ng-repeat="node in board.board_array track by $index" ng-click="setMove($index)"
-                 ng-class="{'cross': node == 0, 'circle': node == 1}">
-            </div>
+          <div
+            class="node"
+            ng-repeat="node in board.board_array track by $index"
+            ng-click="setMove($index)"
+            ng-class="{'cross': node == 0, 'circle': node == 1}"
+          ></div>
         </div>
+      </div>
     </div>
-</div>
 
-<script src="assets/TicTacToe.js"></script>
-
-<script>
-    var TicTacToe = new TicTacToe(new HumanPlayer("Cate"), new HumanPlayer("Doge"));
-
-   var app = angular.module('TicTacToeApp', []);
-
-    app.controller('TicTacToeController', function($scope){
-        $scope.board = TicTacToe.board;
-        $scope.game_state = TicTacToe.getGameStatus();
-        $scope.current_player = TicTacToe.getCurrentPlayer();
-
-        $scope.newGame = function(){
-            TicTacToe.newGame();
-            $scope.board = TicTacToe.board;
-            $scope.game_state = TicTacToe.getGameStatus();
-            $scope.current_player = TicTacToe.getCurrentPlayer();
-        };
-
-        $scope.setMove = function(position){
-            if($scope.game_state != 2 && TicTacToe.makeMove(position)){
-                $scope.game_state = TicTacToe.getGameStatus();
-                console.log($scope.board.num_moves);
-                if($scope.game_state == -2)
-                    TicTacToe.nextPlayer();
-                $scope.current_player = TicTacToe.getCurrentPlayer();
-            }
-        };
-    });
-
-</script>
-</body>
+    <script src="./src/index.ts"></script>
+  </body>
 </html>

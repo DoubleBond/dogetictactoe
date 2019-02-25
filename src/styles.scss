@@ -1,0 +1,28 @@
+.container {
+  width: 570px;
+  margin: 0 auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.board {
+  width: 570px;
+  height: 570px;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+}
+.node {
+  float: left;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  width: 190px;
+  height: 190px;
+  box-sizing: border-box;
+}
+.cross {
+  background: url("./assets/cate.jpg");
+  background-size: cover;
+}
+.circle {
+  background: url("./assets/doge.jpg");
+  background-size: cover;
+}
