@@ -3,8 +3,8 @@ import { Board } from "../Board";
 
 export class ComputerPlayer extends Player {
   constructor(name: string) {
-    super(name);
+    super(name, require("../../../assets/doge.jpg"));
   }
 
-  public getMove(board: Board) {}
+  public getMove(board: Board): number {}
 }

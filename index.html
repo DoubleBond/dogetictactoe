@@ -6,32 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tic Tac Toe</title>
   </head>
-  <body ng-app="TicTacToeApp" class="doge">
-    <div id="element" ng-controller="TicTacToeController">
-      <div class="container" style="margin-top: 60px">
-        <div>
-          <h2 ng-show="game_state == -2">
-            It's {{ current_player.name }} turn.
-          </h2>
-          <h2 ng-show="game_state > -1">
-            {{ current_player.name }} has WON!!!
-          </h2>
-          <h2 ng-show="game_state == -1">It's a tie</h2>
-          <button class="btn" ng-show="game_state > -2" ng-click="newGame()">
-            New Game?
-          </button>
-        </div>
-        <div class="board">
-          <div
-            class="node"
-            ng-repeat="node in board.board_array track by $index"
-            ng-click="setMove($index)"
-            ng-class="{'cross': node == 0, 'circle': node == 1}"
-          ></div>
-        </div>
-      </div>
-    </div>
-
+  <body>
+    <game></game>
     <script src="./src/index.ts"></script>
   </body>
 </html>

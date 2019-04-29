@@ -1,39 +1,81 @@
 import { Board } from "./Board";
 import { Player } from "./players/Player";
 
+export enum TicTacToeGameState {
+  IN_PROGRESS,
+  WINNING,
+  TIE
+}
+
+export interface TicTacToeState {
+  state: TicTacToeGameState;
+  board: Player[];
+  player: Player;
+  winner: Player;
+}
+
 export class TicTacToe {
-  public board: Board;
-  public players: Player[];
-  public player_turn: number;
+  private board: Board;
+  private players: Player[];
+  private playerState: number;
 
-  public constructor(player_1: Player, player_2: Player) {
-    this.players = [player_1, player_2];
+  public constructor(playerOne: Player, playerTwo: Player) {
+    this.players = [playerOne, playerTwo];
     this.board = new Board();
 
-    this.player_turn = 0;
+    this.playerState = 0;
   }
 
-  public getCurrentPlayer() {
-    return this.players[this.player_turn];
+  /**
+   * Returns the entire game state, see TicTacToeState interface.
+   */
+  public getState(): TicTacToeState {
+    const state = this.getGameState();
+    return {
+      state,
+      board: this.board.getBoardArrayState(),
+      player: this.getCurrentPlayer(),
+      winner:
+        state === TicTacToeGameState.WINNING
+          ? this.players[(this.playerState + 1) % 2]
+          : null
+    };
   }
 
-  public newGame() {
-    this.player_turn = ++this.player_turn % 2;
-    this.board = new Board();
-  }
-
-  public getGameStatus() {
-    if (this.board.num_moves < 3) return -2;
-    if (this.board.checkWinner()) return this.player_turn;
-    if (this.board.num_moves == 9) return -1;
-    return -2;
-  }
-
-  public nextPlayer() {
-    this.player_turn = ++this.player_turn % 2;
-  }
-
+  /**
+   * Makes a move a board. If the move is invalide the state wont change.
+   *
+   * @param position The position the player was to move.
+   */
   public makeMove(position: number) {
-    return this.board.setMove(position, this.player_turn);
+    if (this.board.setMove(position, this.getCurrentPlayer())) {
+      this.nextPlayer();
+      return true;
+    }
+    return false;
+  }
+
+  private getCurrentPlayer() {
+    return this.players[this.playerState];
+  }
+
+  private getGameState(): TicTacToeGameState {
+    if (this.board.getNumberOfMoves() < 3) {
+      return TicTacToeGameState.IN_PROGRESS;
+    }
+
+    if (this.board.hasWinner()) {
+      return TicTacToeGameState.WINNING;
+    }
+
+    if (this.board.getNumberOfMoves() == 9) {
+      return TicTacToeGameState.TIE;
+    }
+
+    return TicTacToeGameState.IN_PROGRESS;
+  }
+
+  private nextPlayer() {
+    this.playerState = ++this.playerState % 2;
   }
 }

@@ -1,75 +1,99 @@
+import { Player } from "./players/Player";
+
 export class Board {
-  public board_array: number[];
-  public num_moves: number;
+  private boardArray: Player[];
+  private numMoves: number;
 
   public constructor() {
-    this.num_moves = 0;
-    this.board_array = [-1, -1, -1, -1, -1, -1, -1, -1, -1];
+    this.numMoves = 0;
+    this.boardArray = new Array(9).fill(null);
   }
 
-  public setMove(position: number, player_index: number): boolean {
-    if (this.board_array[position] != -1) return false;
+  /**
+   * Sets a move on the board.
+   *
+   * @param position Which position to set.
+   * @param player Which player is setting the move.
+   */
+  public setMove(position: number, player: Player): boolean {
+    if (this.boardArray[position] !== null) {
+      return false;
+    }
 
-    this.board_array[position] = player_index;
-    this.num_moves++;
+    this.boardArray[position] = player;
+    this.numMoves++;
     return true;
   }
 
   /**
-   * O(1), for the win.
+   * Gets the total number of moves that was placed on the board.
    */
-  public checkWinner() {
+  public getNumberOfMoves(): number {
+    return this.numMoves;
+  }
+
+  /**
+   * Gets the board state in numeric form.
+   */
+  public getBoardArrayState(): Player[] {
+    return [...this.boardArray];
+  }
+
+  /**
+   * Checks if the board has
+   */
+  public hasWinner(): boolean {
     //Horizontal Check
     if (
-      this.board_array[0] !== -1 &&
-      this.board_array[0] == this.board_array[1] &&
-      this.board_array[0] == this.board_array[2]
+      this.boardArray[0] !== null &&
+      this.boardArray[0] === this.boardArray[1] &&
+      this.boardArray[0] === this.boardArray[2]
     )
       return true;
     if (
-      this.board_array[3] !== -1 &&
-      this.board_array[3] == this.board_array[4] &&
-      this.board_array[3] == this.board_array[5]
+      this.boardArray[3] !== null &&
+      this.boardArray[3] === this.boardArray[4] &&
+      this.boardArray[3] === this.boardArray[5]
     )
       return true;
     if (
-      this.board_array[6] !== -1 &&
-      this.board_array[6] == this.board_array[7] &&
-      this.board_array[6] == this.board_array[8]
+      this.boardArray[6] !== null &&
+      this.boardArray[6] === this.boardArray[7] &&
+      this.boardArray[6] === this.boardArray[8]
     )
       return true;
 
     //Vertical Check
     if (
-      this.board_array[0] !== -1 &&
-      this.board_array[0] == this.board_array[3] &&
-      this.board_array[0] == this.board_array[6]
+      this.boardArray[0] !== null &&
+      this.boardArray[0] === this.boardArray[3] &&
+      this.boardArray[0] === this.boardArray[6]
     )
       return true;
     if (
-      this.board_array[1] !== -1 &&
-      this.board_array[1] == this.board_array[4] &&
-      this.board_array[1] == this.board_array[7]
+      this.boardArray[1] !== null &&
+      this.boardArray[1] === this.boardArray[4] &&
+      this.boardArray[1] === this.boardArray[7]
     )
       return true;
     if (
-      this.board_array[2] !== -1 &&
-      this.board_array[2] == this.board_array[5] &&
-      this.board_array[2] == this.board_array[8]
+      this.boardArray[2] !== null &&
+      this.boardArray[2] === this.boardArray[5] &&
+      this.boardArray[2] === this.boardArray[8]
     )
       return true;
 
     //Diagonal Check
     if (
-      this.board_array[0] !== -1 &&
-      this.board_array[0] == this.board_array[4] &&
-      this.board_array[0] == this.board_array[8]
+      this.boardArray[0] !== null &&
+      this.boardArray[0] === this.boardArray[4] &&
+      this.boardArray[0] === this.boardArray[8]
     )
       return true;
     if (
-      this.board_array[2] !== -1 &&
-      this.board_array[2] == this.board_array[4] &&
-      this.board_array[2] == this.board_array[6]
+      this.boardArray[2] !== null &&
+      this.boardArray[2] === this.boardArray[4] &&
+      this.boardArray[2] === this.boardArray[6]
     )
       return true;
 
