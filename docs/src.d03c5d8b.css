@@ -1,0 +1,1 @@
+body{margin:0}#wrapper{display:flex;height:100vh}.container{margin:auto;padding-bottom:5rem}.btn{margin-bottom:1rem}.board{width:27rem;height:27rem;border-left:1px solid #000;border-top:1px solid #000}.node{float:left;border-bottom:1px solid #000;border-right:1px solid #000;width:9rem;height:9rem;box-sizing:border-box;background-size:cover}

@@ -1,12 +1,24 @@
-.container {
-  width: 570px;
-  margin: 0 auto;
-  padding-right: 15px;
-  padding-left: 15px;
+body {
+  margin: 0;
 }
+
+#wrapper {
+  display: flex;
+  height: 100vh;
+}
+.container {
+  margin: auto;
+  padding-bottom: 5rem;
+}
+
+.btn {
+  margin-bottom: 1rem;
+}
+
+$size: 27rem;
 .board {
-  width: 570px;
-  height: 570px;
+  width: $size;
+  height: $size;
   border-left: 1px solid black;
   border-top: 1px solid black;
 }
@@ -14,8 +26,8 @@
   float: left;
   border-bottom: 1px solid black;
   border-right: 1px solid black;
-  width: 190px;
-  height: 190px;
+  width: $size / 3;
+  height: $size / 3;
   box-sizing: border-box;
   background-size: cover;
 }

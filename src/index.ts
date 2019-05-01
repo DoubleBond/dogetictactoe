@@ -1,7 +1,5 @@
-import { platformBrowserDynamic } from "../node_modules/angular-ts-decorators";
-import { platformBrowserDynamic } from "angular-ts-decorators";
-
+import m from "mithril";
 import "./styles.scss";
-import { AppModule } from "./app/app.module";
+import { GameComponent } from "./app/game.component";
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+m.mount(document.getElementById("root"), GameComponent);

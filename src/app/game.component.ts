@@ -1,4 +1,5 @@
-import { Component } from "angular-ts-decorators";
+import m from "mithril";
+
 import {
   TicTacToeState,
   TicTacToe,
@@ -6,42 +7,21 @@ import {
   TicTacToeGameState,
   ComputerPlayer
 } from "./tictactoe";
+import { BoardComponent } from "./board.component";
 
-@Component({
-  selector: "game",
-  template: `
-    <div id="element">
-      <div class="container" style="margin-top: 60px">
-        <div>
-          <h2 data-ng-if="$ctrl.isInProgress">
-            It's {{ $ctrl.player.name }} turn.
-          </h2>
-          <h2 data-ng-if="$ctrl.hasWinning">
-            {{ $ctrl.state.winner.name }} has WON!!!
-          </h2>
-          <h2 data-ng-if="$ctrl.isTie">It's a tie</h2>
-          <button
-            class="btn"
-            data-ng-if="$ctrl.hasWinning || $ctrl.isTie"
-            data-ng-click="$ctrl.setNewGame()"
-          >
-            New Game?
-          </button>
-        </div>
-        <board
-          data-board="$ctrl.state.board"
-          data-on-click="$ctrl.setMove(index)"
-        ></board>
-      </div>
-    </div>
-  `
-})
-export class GameComponent implements angular.IController {
+export class GameComponent {
   private state: TicTacToeState;
   private game: TicTacToe;
 
-  $onInit() {
+  oninit() {
     this.setNewGame();
+
+    document.addEventListener("keydown", event => {
+      if (event.code === "Escape") {
+        this.setNewGame();
+        m.redraw();
+      }
+    });
   }
 
   setNewGame() {
@@ -86,5 +66,30 @@ export class GameComponent implements angular.IController {
 
   get isInProgress() {
     return this.gameState === TicTacToeGameState.IN_PROGRESS;
+  }
+
+  view() {
+    return m("div", { id: "wrapper" }, [
+      m("div", { class: "container" }, [
+        m("div", [
+          this.isInProgress
+            ? m("h2", `Can you beat Doge? Much try.`)
+            : undefined,
+          this.hasWinning
+            ? m("h2", `Wow. Much ${this.state.winner.name}. Such lost.`)
+            : undefined,
+          this.isTie ? m("h2", `Such tie. Much wow!`) : undefined,
+          m(
+            "button",
+            { class: "btn", onclick: this.setNewGame.bind(this) },
+            `New Game? (Esc)`
+          )
+        ]),
+        m(BoardComponent, {
+          board: this.state.board,
+          onclick: this.setMove.bind(this)
+        })
+      ])
+    ]);
   }
 }
