@@ -47,15 +47,26 @@ export class TicTacToe {
    *
    * @param position The position the player was to move.
    */
-  public makeMove(position: number) {
+  public makeMove(position: number): boolean {
     if (this.board.setMove(position, this.getCurrentPlayer())) {
-      this.nextPlayer();
+      this.setNextPlayerState();
       return true;
     }
     return false;
   }
 
-  private getCurrentPlayer() {
+  /**
+   * Clones a game, and returns and instance copy.
+   */
+  public clone() {
+    const game = new TicTacToe(this.players[0], this.players[1]);
+    game.playerState = this.playerState;
+    game.board = this.board.clone();
+
+    return game;
+  }
+
+  private getCurrentPlayer(): Player {
     return this.players[this.playerState];
   }
 
@@ -68,14 +79,14 @@ export class TicTacToe {
       return TicTacToeGameState.WINNING;
     }
 
-    if (this.board.getNumberOfMoves() == 9) {
+    if (this.board.getNumberOfMoves() === 9) {
       return TicTacToeGameState.TIE;
     }
 
     return TicTacToeGameState.IN_PROGRESS;
   }
 
-  private nextPlayer() {
+  private setNextPlayerState(): void {
     this.playerState = ++this.playerState % 2;
   }
 }

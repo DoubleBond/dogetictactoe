@@ -3,7 +3,8 @@ import {
   TicTacToeState,
   TicTacToe,
   HumanPlayer,
-  TicTacToeGameState
+  TicTacToeGameState,
+  ComputerPlayer
 } from "./tictactoe";
 
 @Component({
@@ -46,14 +47,23 @@ export class GameComponent implements angular.IController {
   setNewGame() {
     this.game = new TicTacToe(
       new HumanPlayer("Cate", require("../assets/cate.jpg")),
-      new HumanPlayer("Doge", require("../assets/doge.jpg"))
+      new ComputerPlayer()
     );
     this.state = this.game.getState();
   }
 
   setMove(position: number) {
-    if (this.gameState === TicTacToeGameState.IN_PROGRESS) {
-      this.game.makeMove(position);
+    if (
+      this.gameState === TicTacToeGameState.IN_PROGRESS &&
+      this.game.makeMove(position)
+    ) {
+      this.state = this.game.getState();
+    }
+    if (
+      this.gameState === TicTacToeGameState.IN_PROGRESS &&
+      this.player instanceof ComputerPlayer
+    ) {
+      this.game.makeMove(this.player.getMove(this.game));
       this.state = this.game.getState();
     }
   }
