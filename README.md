@@ -2,7 +2,7 @@
 
 Can you beat doge?
 
-Smart doge engine coming soon. Such wow
+Includes smart doge engine. Such wow. Play now. http://ghiobi.github.io/Doge-TicTacToe/
 
 ## To start deving
 

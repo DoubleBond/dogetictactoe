@@ -5,10 +5,15 @@ export class BoardComponent {
       vnode.attrs.board.map((node, index) =>
         m("div", {
           class: "node",
-          style: `background-image: ${node ? "url(" + node.avatar + ")" : ""}`,
-          onclick: () => {
-            vnode.attrs.onclick(index);
-          }
+          style: {
+            backgroundImage: `${node ? "url(" + node.avatar + ")" : ""}`,
+            cursor: node ? "initial" : null
+          },
+          onclick:
+            !node &&
+            function() {
+              vnode.attrs.onclick(index);
+            }
         })
       )
     ]);

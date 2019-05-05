@@ -1,8 +1,8 @@
 import { Player } from "./Player";
-import { TicTacToe, TicTacToeGameState } from "../TicTacToe";
+import { TicTacToe, TicTacToeGameStatus } from "../TicTacToe";
 export class ComputerPlayer extends Player {
-  constructor() {
-    super("Doge", require("../../../assets/doge.jpg"));
+  constructor(name: string, avatar: string) {
+    super(name, avatar);
   }
 
   public getMove(game: TicTacToe): number {
@@ -26,7 +26,7 @@ export class ComputerPlayer extends Player {
       } else {
         if (child.score < parent.score || parent.score === null) {
           parent.score = child.score;
-          parent.result == child;
+          parent.result = child;
         }
       }
     }
@@ -40,10 +40,10 @@ export class ComputerPlayer extends Player {
    * @param node A node.
    */
   private search(node: Node): Node {
-    const { board, state, winner } = node.game.getState();
+    const { board, status, winner } = node.game.state;
 
-    if (state !== TicTacToeGameState.IN_PROGRESS) {
-      if (state === TicTacToeGameState.WINNING) {
+    if (status !== TicTacToeGameStatus.IN_PROGRESS) {
+      if (status === TicTacToeGameStatus.WINNING) {
         if (winner === this) {
           node.score = 100;
         } else {
@@ -57,7 +57,7 @@ export class ComputerPlayer extends Player {
 
     this.getPossibleActions(board).forEach(action => {
       const clone = node.game.clone();
-      clone.makeMove(action);
+      clone.move(action);
 
       const child = new Node(clone, node, action);
       node.children.add(child);

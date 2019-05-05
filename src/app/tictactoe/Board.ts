@@ -2,10 +2,10 @@ import { Player } from "./players/Player";
 
 export class Board {
   private array: Player[];
-  private numMoves: number;
+  private moves: number;
 
   public constructor() {
-    this.numMoves = 0;
+    this.moves = 0;
     this.array = new Array(9).fill(null);
   }
 
@@ -15,7 +15,7 @@ export class Board {
    * @param position Which position to set.
    * @param player Which player is setting the move.
    */
-  public setMove(position: number, player: Player): boolean {
+  public move(position: number, player: Player): boolean {
     if (this.array[position] !== null) {
       return false;
     }
@@ -23,21 +23,25 @@ export class Board {
     this.array = [...this.array];
     this.array[position] = player;
 
-    this.numMoves++;
+    this.moves++;
     return true;
   }
 
   /**
    * Gets the total number of moves that was placed on the board.
+   *
+   * @returns The total number of moves.
    */
-  public getNumberOfMoves(): number {
-    return this.numMoves;
+  public getMoves(): number {
+    return this.moves;
   }
 
   /**
-   * Gets the board state in numeric form.
+   * Gets the 3 by 3 board in a flat single array.
+   *
+   * @returns The array of players on the board.
    */
-  public getBoardArrayState(): Player[] {
+  public getBoard(): Player[] {
     return this.array;
   }
 
@@ -106,10 +110,10 @@ export class Board {
   /**
    * Clones the board.
    */
-  public clone() {
+  public clone(): Board {
     const board = new Board();
-    board.array = this.getBoardArrayState();
-    board.numMoves = this.numMoves;
+    board.array = this.getBoard();
+    board.moves = this.moves;
     return board;
   }
 }
